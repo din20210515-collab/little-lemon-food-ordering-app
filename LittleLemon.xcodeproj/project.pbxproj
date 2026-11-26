@@ -1,4 +1,3 @@
-
 {
  archiveVersion = 1;
  classes = {};
@@ -165,7 +164,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-  F00000000000000000000001 = {isa = XCConfigurationList; buildConfigurations = (H00000000000000000000001, H00000000000000000000000002); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+  F00000000000000000000001 = {isa = XCConfigurationList; buildConfigurations = (H00000000000000000000001, H00000000000000000000002); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
   F00000000000000000000002 = {isa = XCConfigurationList; buildConfigurations = (H00000000000000000000003, H00000000000000000000004); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
  };
