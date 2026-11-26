@@ -8,36 +8,24 @@ struct HomeView: View {
     @State private var selectedCategory = "All"
 
     private let categories = [
-        "All", "Starters", "Mains", "Desserts", "Drinks"
+        "All",
+        "Starters",
+        "Mains",
+        "Desserts",
+        "Drinks"
     ]
 
-    private let menuItems = [
-        FoodItem(name: "Greek Salad", category: "Starters",
-                 description: "Fresh vegetables, olives and feta cheese.",
-                 price: 8.99, emoji: "🥗"),
-        FoodItem(name: "Grilled Fish", category: "Mains",
-                 description: "Fresh grilled fish with lemon.",
-                 price: 15.99, emoji: "🐟"),
-        FoodItem(name: "Pasta", category: "Mains",
-                 description: "Pasta with a delicious tomato sauce.",
-                 price: 12.99, emoji: "🍝"),
-        FoodItem(name: "Lemon Dessert", category: "Desserts",
-                 description: "A sweet and refreshing lemon dessert.",
-                 price: 6.99, emoji: "🍋"),
-        FoodItem(name: "Fresh Juice", category: "Drinks",
-                 description: "Freshly squeezed seasonal juice.",
-                 price: 4.99, emoji: "🥤")
-    ]
+    private var filteredItems: [MenuItem] {
+        MenuItem.sampleItems.filter { item in
 
-    private var filteredItems: [FoodItem] {
-        menuItems.filter { item in
             let matchesCategory =
                 selectedCategory == "All" ||
                 item.category == selectedCategory
 
             let matchesSearch =
                 searchText.isEmpty ||
-                item.name.localizedCaseInsensitiveContains(searchText)
+                item.name.localizedCaseInsensitiveContains(searchText) ||
+                item.description.localizedCaseInsensitiveContains(searchText)
 
             return matchesCategory && matchesSearch
         }
@@ -47,8 +35,9 @@ struct HomeView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
 
+                // Header
                 HStack {
-                    VStack(alignment: .leading) {
+                    VStack(alignment: .leading, spacing: 5) {
                         Text("LITTLE LEMON")
                             .font(.title2)
                             .bold()
@@ -67,33 +56,53 @@ struct HomeView: View {
                     }
                 }
 
+                // Restaurant Information
                 VStack(alignment: .leading, spacing: 10) {
                     Text("Little Lemon Restaurant")
                         .font(.title)
                         .bold()
                         .foregroundColor(.white)
 
-                    Text("Discover delicious Mediterranean food made fresh for you.")
-                        .foregroundColor(.white)
+                    Text(
+                        "Discover delicious Mediterranean food made fresh for you."
+                    )
+                    .foregroundColor(.white)
 
                     Text("Order your favorite meal today!")
-                        .foregroundColor(.white)
                         .bold()
+                        .foregroundColor(.white)
                 }
                 .padding()
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color(red: 0.15, green: 0.25, blue: 0.30))
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+                .background(
+                    Color(
+                        red: 0.15,
+                        green: 0.25,
+                        blue: 0.30
+                    )
+                )
                 .cornerRadius(15)
 
-                TextField("Search for food...", text: $searchText)
-                    .textFieldStyle(.roundedBorder)
+                // Search
+                TextField(
+                    "Search for food...",
+                    text: $searchText
+                )
+                .textFieldStyle(.roundedBorder)
 
+                // Categories
                 Text("Food Categories")
                     .font(.title2)
                     .bold()
 
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
+                ScrollView(
+                    .horizontal,
+                    showsIndicators: false
+                ) {
+                    HStack(spacing: 10) {
                         ForEach(categories, id: \.self) { category in
                             Button {
                                 selectedCategory = category
@@ -108,7 +117,8 @@ struct HomeView: View {
                                     )
                                     .foregroundColor(
                                         selectedCategory == category
-                                        ? .white : .primary
+                                        ? .white
+                                        : .primary
                                     )
                                     .cornerRadius(20)
                             }
@@ -116,16 +126,27 @@ struct HomeView: View {
                     }
                 }
 
+                // Menu
                 Text("Our Menu")
                     .font(.title2)
                     .bold()
 
                 ForEach(filteredItems) { item in
                     HStack(spacing: 15) {
-                        Text(item.emoji)
-                            .font(.system(size: 45))
 
-                        VStack(alignment: .leading, spacing: 5) {
+                        Image(systemName: "fork.knife")
+                            .font(.system(size: 30))
+                            .foregroundColor(.orange)
+                            .frame(width: 55, height: 55)
+                            .background(
+                                Color.orange.opacity(0.12)
+                            )
+                            .cornerRadius(10)
+
+                        VStack(
+                            alignment: .leading,
+                            spacing: 5
+                        ) {
                             Text(item.name)
                                 .font(.headline)
 
@@ -133,21 +154,28 @@ struct HomeView: View {
                                 .font(.caption)
                                 .foregroundColor(.secondary)
 
-                            Text("$\(item.price, specifier: "%.2f")")
-                                .bold()
-                                .foregroundColor(.orange)
+                            Text(
+                                "$\(item.price, specifier: "%.2f")"
+                            )
+                            .bold()
+                            .foregroundColor(.orange)
                         }
 
                         Spacer()
                     }
                     .padding()
-                    .background(Color.gray.opacity(0.1))
+                    .background(
+                        Color.gray.opacity(0.1)
+                    )
                     .cornerRadius(12)
                 }
 
+                // Empty Search Result
                 if filteredItems.isEmpty {
                     Text("No meals found.")
                         .foregroundColor(.secondary)
+                        .frame(maxWidth: .infinity)
+                        .padding()
                 }
             }
             .padding()
@@ -155,13 +183,4 @@ struct HomeView: View {
         .navigationTitle("Home")
         .navigationBarTitleDisplayMode(.inline)
     }
-}
-
-struct FoodItem: Identifiable {
-    let id = UUID()
-    let name: String
-    let category: String
-    let description: String
-    let price: Double
-    let emoji: String
 }
